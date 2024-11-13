@@ -8,10 +8,13 @@
     "micropico.syncFolder": "",
     "micropico.openOnStart": true,
     "python.analysis.typeshedPaths": [
-        "~\\.micropico-stubs\\included"
+        "~\\.micropico-stubs\\included",
+        "~/.micropico-stubs/included"
     ],
     "python.analysis.extraPaths": [
         "~\\.micropico-stubs\\included",
-        "C:\\Users\\PascalGuedon\\.micropico-stubs\\included"
-    ]
+        "C:\\Users\\PascalGuedon\\.micropico-stubs\\included",
+        "~/.micropico-stubs/included"
+    ],
+    "python.terminal.activateEnvironment": false
 }
