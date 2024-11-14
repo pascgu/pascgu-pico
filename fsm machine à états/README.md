@@ -27,9 +27,9 @@ Les diagrammes peuvent aussi être ouverts (et surtout créés) avec le logiciel
 ## fsm2
 ![fsm2-drawio.png](fsm2-drawio.png)
 
-[Code : fsm2-1button1LED telerupteur.py]("fsm2-1button1LED telerupteur.py")
+[Code : fsm2-1button1LED telerupteur.py](<fsm2-1button1LED telerupteur.py>)
 
 ## fsm3
 ![fsm3-drawio.png](fsm3-drawio.png)
 
-[Code : fsm3-1button1LED telerupteur avec clignotte.py](fsm3-1button1LED telerupteur avec clignotte.py)
+[Code : fsm3-1button1LED telerupteur avec clignotte.py](<fsm3-1button1LED telerupteur avec clignotte.py>)
