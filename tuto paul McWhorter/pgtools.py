@@ -25,3 +25,11 @@ class LinearConverter:
             if Y < self.y_min: Y=self.y_min
             if Y > self.y_max: Y=self.y_max
         return Y
+    
+class SState():
+    '''classe de base à hériter pour chaque état d'une machine à état (cf répertoire "fsm machine à états" )'''
+    _val:int=0
+    def val(self) -> int:
+        return self._val
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}#{self._val}"

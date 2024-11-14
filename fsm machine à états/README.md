@@ -1,6 +1,6 @@
 # FSM : Finite State Machine
 
-**Intérêts des machines à état** : meilleure lisibilité du code, code indépendant pour chaque état, l'ajout d'un nouvel état ne casse pas le reste.
+__Intérêts des machines à état__ : meilleure lisibilité du code, code indépendant pour chaque état, l'ajout d'un nouvel état ne casse pas le reste.
 
 
 Seulement 1 Etat à la fois. Le système est soit dans un état stable (arrêt) soit dans un état "il est en train de..." (avancer/monter/...).
@@ -18,3 +18,6 @@ A chaque fois, il y a le diagramme au format image (ex: fsm1-drawio.png) et le c
 
 
 Les diagrammes peuvent aussi être ouverts (et surtout créés) avec le logiciel DrawIO (version online ou Desktop).
+
+## fsm1
+![Diagramme de machine à état : fsm1-drawio.png](fsm1-drawio.png)
