@@ -19,22 +19,22 @@ A chaque fois, il y a le diagramme au format image (ex: fsm1-drawio.png) et le c
 
 Les diagrammes peuvent aussi être ouverts (et surtout créés) avec le logiciel DrawIO (version online ou Desktop).
 
-## fsm1 : 2 boutons permettent pour l'un d'alumer ou éteindre une LED, pour l'autre d'activer le Clignottement de la LED
-Ici c'est seulement quand on relève le bouton que les changements d'état se font. Mais ce n'est pas le plus stable surtout quand ça devient plus complexe.
+## fsm1 : 2 boutons permettent pour l'un d'allumer ou d'éteindre une LED, pour l'autre d'activer le clignottement de la LED
+Ici c'est seulement quand on relève le bouton que les changements d'état se font. Mais ce n'est pas le plus stable surtout quand ça devient plus complexe avec plus de boutons.
 
 ![fsm1-drawio.png](fsm1-drawio.png)
 
 [Code : fsm1-2buttons1LED.py](fsm1-2buttons1LED.py)
 
-## fsm2 : 1 bouton permet d'alumer ou éteindre une LED
-Ici on distingue dans chaque état si le bouton et appuyé ou relevé
+## fsm2 : 1 bouton permet d'allumer ou d'éteindre une LED
+Ici on distingue dans chaque état si le bouton et appuyé ou relevé. Ce qui sera plus stable si ça devient plus complexe.
 
 ![fsm2-drawio.png](fsm2-drawio.png)
 
 [Code : fsm2-1button1LED telerupteur.py](<fsm2-1button1LED telerupteur.py>)
 
-## fsm3 : 1 bouton permet d'alumer ou éteindre ou faire clignotter une LED
-Idem que fsm2 mais avec la gestion en plus du clignottement
+## fsm3 : 1 bouton permet d'allumer ou d'éteindre ou de faire clignotter une LED
+Idem que fsm2 mais avec la gestion en plus du clignottement.
 
 ![fsm3-drawio.png](fsm3-drawio.png)
 
