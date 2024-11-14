@@ -18,17 +18,15 @@ clignotte_seconds = 0.3
 nb_clignotte_counter = clignotte_seconds / wait_seconds
 
 class SState():
-    _val:int=0
-    def val(self) -> int:
-        return self._val
+    val:int
     def __str__(self) -> str:
-        return f"{self.__class__.__name__}#{self._val}"
-class StateOff1(SState): _val=1
-class StateOn1(SState):  _val=2
-class StateOn2(SState):  _val=3
-class StateClignotte1(SState):  _val=4
-class StateClignotte2(SState):  _val=5
-class StateOff2(SState): _val=6
+        return f"{self.__class__.__name__}#{self.val}"
+class StateOff1(SState): val=1
+class StateOn1(SState):  val=2
+class StateOn2(SState):  val=3
+class StateClignotte1(SState):  val=4
+class StateClignotte2(SState):  val=5
+class StateOff2(SState): val=6
 
 class State():
     Off1        = StateOff1()
@@ -40,7 +38,7 @@ class State():
 
 def run_state(state:SState):
     '''fonction qui exécute l'état'''
-    global led, current_led_value, clignotte_counter, nb_clignotte_counter
+    global current_led_value, clignotte_counter, nb_clignotte_counter
     if state == State.Off1 or state == State.Off2:
         led.value(False)
     elif state == State.On1 or state == State.On2:
@@ -68,7 +66,7 @@ def change_state(state:SState):
 
 def enter_state(state:SState):
     '''point d'entrée où on peut exécuter des choses quand on entre dans l'état'''
-    global current_led_value, clignotte_counter, led
+    global current_led_value, clignotte_counter
     if state == State.Clignotte1:
         clignotte_counter = 0
         current_led_value = False
@@ -76,13 +74,12 @@ def enter_state(state:SState):
     
 def leave_state(state:SState):
     '''point d'entrée où on peut exécuter des choses quand on sort de l'état'''
-    global current_led_value
     if state == State.Clignotte2:
         led.value(False)
 
 def transitions():
     '''fonction qui teste s'il y a des transitions déclenchées et si c'est le cas change d'état'''
-    global current_state, button1
+    global current_state
     bt1_pressed = not button1.value() # car PULL_UP, défaut 1 et si enfoncé 0
     new_state = None
     if current_state == State.Off1:
