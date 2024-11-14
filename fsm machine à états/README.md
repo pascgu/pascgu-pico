@@ -20,4 +20,4 @@ A chaque fois, il y a le diagramme au format image (ex: fsm1-drawio.png) et le c
 Les diagrammes peuvent aussi être ouverts (et surtout créés) avec le logiciel DrawIO (version online ou Desktop).
 
 ## fsm1
-![Diagramme de machine à état : fsm1-drawio.png](fsm1-drawio.png)
+[Diagramme de machine à état : fsm1-drawio.png](fsm1-drawio.png)
