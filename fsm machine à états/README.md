@@ -20,4 +20,16 @@ A chaque fois, il y a le diagramme au format image (ex: fsm1-drawio.png) et le c
 Les diagrammes peuvent aussi être ouverts (et surtout créés) avec le logiciel DrawIO (version online ou Desktop).
 
 ## fsm1
-[Diagramme de machine à état : fsm1-drawio.png](fsm1-drawio.png)
+![fsm1-drawio.png](fsm1-drawio.png)
+
+[Code : fsm1-2buttons1LED.py](fsm1-2buttons1LED.py)
+
+## fsm2
+![fsm2-drawio.png](fsm2-drawio.png)
+
+[Code : fsm2-1button1LED telerupteur.py](fsm2-1button1LED telerupteur.py)
+
+## fsm3
+![fsm3-drawio.png](fsm3-drawio.png)
+
+[Code : fsm3-1button1LED telerupteur avec clignotte.py](fsm3-1button1LED telerupteur avec clignotte.py)
