@@ -98,6 +98,8 @@ def is_bt2_new_pressed():
     return ret
 
 
+############### MAIN #################
+
 current_state=State.Off # init
 current_led_value=False
 print('prog start')
