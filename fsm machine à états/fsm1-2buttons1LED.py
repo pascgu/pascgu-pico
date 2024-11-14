@@ -1,4 +1,5 @@
 ''' fsm1 : exemple de machine à état avec 2 boutons et 1 led. 3 états : Off/On/Clignotte. Transitions: Off->bt1->On->bt1->Off  On|Off->bt2->Clignotte->bt1->Off
+    C'est plus clair avec le fichier fsm1-drawio.png qui peut être ouvert comme une image ou avec le logiciel DrawIO et qui permet de créer ces diagrammes.
     C'est une machine à état de système synchrone car le test des transitions est fait de manière synchrone toutes les X millisecondes.
     exemple créé à partir de lesson18 et des vidéos suivantes :
     https://www.youtube.com/watch?v=HJx3DeW7J4Q (FR)
