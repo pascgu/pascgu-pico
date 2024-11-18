@@ -24,6 +24,7 @@ class StateOn1(SState):  _val=2
 class StateOn2(SState):  _val=3
 class StateOff2(SState): _val=4
 
+# Cette classe n'est là que pour clarifier l'utilisation des états et se rapprocher d'un enum (qui n'existe pas en micropython)
 class State():
     Off1 = StateOff1()
     On1  = StateOn1()

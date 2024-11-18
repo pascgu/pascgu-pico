@@ -15,6 +15,7 @@ button2 = Pin(16, Pin.IN, Pin.PULL_DOWN) # Pin.PULL_DOWN indique que l'on veut q
 led = Pin(12, Pin.OUT)
 wait_seconds = 0.5 # délai entre 2 boucles de refresh des états et test des transitions
 
+# Cette classe n'est là que pour clarifier l'utilisation des états et se rapprocher d'un enum (qui n'existe pas en micropython)
 class State():
     Off = 1
     On = 2

@@ -28,6 +28,7 @@ class StateClignotte1(SState):  val=4
 class StateClignotte2(SState):  val=5
 class StateOff2(SState): val=6
 
+# Cette classe n'est là que pour clarifier l'utilisation des états et se rapprocher d'un enum (qui n'existe pas en micropython)
 class State():
     Off1        = StateOff1()
     On1         = StateOn1()

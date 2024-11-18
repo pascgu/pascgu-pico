@@ -65,6 +65,7 @@ class StateClignotte2(StateClignotte):
         current_led_value = False
         led.value(current_led_value)
 
+# Cette classe n'est là que pour clarifier l'utilisation des états et se rapprocher d'un enum (qui n'existe pas en micropython)
 class State():
     Off1        = StateOff1()
     On1         = StateOn1()

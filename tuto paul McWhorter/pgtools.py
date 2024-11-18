@@ -28,8 +28,6 @@ class LinearConverter:
     
 class SState():
     '''classe de base à hériter pour chaque état d'une machine à état (cf répertoire "fsm machine à états" )'''
-    _val:int=0
-    def val(self) -> int:
-        return self._val
+    val:int
     def __str__(self) -> str:
-        return f"{self.__class__.__name__}#{self._val}"
+        return f"{self.__class__.__name__}#{self.val}"
