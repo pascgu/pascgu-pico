@@ -17,5 +17,5 @@
         "C:\\Users\\PascalGuedon\\.micropico-stubs\\included",
         "~/.micropico-stubs/included"
     ],
-    "python.terminal.activateEnvironment": false
+    "python.terminal.activateEnvironment": false,
 }
