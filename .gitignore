@@ -1,3 +1,4 @@
 .vs/
 .$*.bkp
 .$*.dtmp
+__pycache__/

@@ -1,31 +1,31 @@
 notes = {
-"NOTE_B0": 31,
-"NOTE_C1": 33,
-"NOTE_CS1": 35,
-"NOTE_D1": 37,
-"NOTE_DS1": 39,
-"NOTE_E1": 41,
-"NOTE_F1": 44,
-"NOTE_FS1": 46,
-"NOTE_G1": 49,
-"NOTE_GS1": 52,
-"NOTE_A1": 55,
-"NOTE_AS1": 58,
-"NOTE_B1": 62,
-"NOTE_C2": 65,
-"NOTE_CS2": 69,
-"NOTE_D2": 73,
-"NOTE_DS2": 78,
-"NOTE_E2": 82,
-"NOTE_F2": 87,
-"NOTE_FS2": 93,
-"NOTE_G2": 98,
-"NOTE_GS2": 104,
-"NOTE_A2": 110,
-"NOTE_AS2": 117,
-"NOTE_B2": 123,
-"NOTE_C3": 131,
-"NOTE_CS3": 139,
+"NOTE_B0": 31,  # si
+"NOTE_C1": 33,  # do_0
+"NOTE_CS1": 35, # do#_0
+"NOTE_D1": 37,  # re
+"NOTE_DS1": 39, # re#
+"NOTE_E1": 41,  # mi
+"NOTE_F1": 44,  # fa
+"NOTE_FS1": 46, # fa#
+"NOTE_G1": 49,  # sol
+"NOTE_GS1": 52, # sol#
+"NOTE_A1": 55,  # la
+"NOTE_AS1": 58, # la#
+"NOTE_B1": 62,  # si_0
+"NOTE_C2": 65,  # do_1
+"NOTE_CS2": 69, # do#_1
+"NOTE_D2": 73,  # re
+"NOTE_DS2": 78, # re#
+"NOTE_E2": 82,  # mi
+"NOTE_F2": 87,  # fa
+"NOTE_FS2": 93, # fa#
+"NOTE_G2": 98,  # sol
+"NOTE_GS2": 104,# sol#
+"NOTE_A2": 110, # la
+"NOTE_AS2": 117,# la#
+"NOTE_B2": 123, # si
+"NOTE_C3": 131,  # do_2
+"NOTE_CS3": 139, # do#_2
 "NOTE_D3": 147,
 "NOTE_DS3": 156,
 "NOTE_E3": 165,
