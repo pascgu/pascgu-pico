@@ -1,6 +1,7 @@
 from melodies import *  # import melodies.py
 from notes import *     # import notes.py
 
+# HOWTO : python conv_melodies.py > autres_melodies.py
 
 conv_notes = {
 "REST": "silence",

@@ -1,3 +1,5 @@
+# fichier généré en faisant : python conv_melodies.py > autres_melodies.py
+
 Star_Trek_intro = {'titre':'Star Trek intro', 'tempo':80,
     'notes':[ ('re_3',Cpt),('sol_3',D),('do_4',Npt),('si_3',C),('sol_3',Dpt),('mi_3',Dpt),('la_3',Dpt),('re_4',B),] }
 Silent_Night = {'titre':'Silent Night', 'tempo':140,
