@@ -3,3 +3,4 @@
 .$*.dtmp
 __pycache__/
 tests ext/ecranTFT/rdagger_micropython-ili9341
+tests ext/ecranTFT/rdagger_micropython-ili9341/*
