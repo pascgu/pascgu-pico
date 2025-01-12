@@ -1,0 +1,9 @@
+Inverse kinematics est aussi appelé Backward kinematics (par opposition à Forward kinematics).
+La cinématique inverse est l'opposée de la cinématique directe.
+L'inverse kinematics consiste à déplacer le bras robot non pas avec 1 input par moteur (il en faut 5 et qui gère les 2 sens),
+mais en définissant seulement 3 axes (x,y,z) et un calcul mathématique permet d'en déduire les angles à utiliser pour chaque moteur.
+On peut aussi n'avoir que 2 axes (1 joystick) et 1 bouton pour monter/descendre à la vertical, 1 autre bouton pour prendre/relacher 1 objet.
+
+Vidéo explicative (en anglais) : https://youtu.be/IN8tjTk8ExI 
+Vidéo FR : https://youtu.be/6KOEQfsgy8Q
+
