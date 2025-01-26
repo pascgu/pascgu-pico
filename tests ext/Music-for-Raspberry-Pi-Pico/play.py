@@ -6,7 +6,7 @@ from utime import sleep
 from melodies import *  # import melodies.py
 from notes import *     # import notes.py
 
-buzzer = PWM(Pin(20))   # pin where buzzer is connected
+buzzer = PWM(Pin(18))   # pin where buzzer is connected
 button = Pin(17, Pin.IN, Pin.PULL_UP)  # pin where you may connect a button
 
 track = 6      # choose track here (see the list in melodies.py)
