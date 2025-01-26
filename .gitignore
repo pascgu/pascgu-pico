@@ -3,3 +3,4 @@
 .$*.dtmp
 __pycache__/
 tests ext/ecranTFT/esophagoose_gt911-micropython
+tests ext/ecranTFT/esophagoose_gt911-micropython/*
