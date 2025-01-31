@@ -58,8 +58,8 @@ class GT911:
         assert len(self.configuration) == gt.CONFIG_SIZE
         checksum = calculate_checksum(self.configuration)
         self.write(gt.CONFIG_START, self.configuration)
-        self.write(gt.CONFIG_CHKSUM, checksum)
-        self.write(gt.CONFIG_FRESH, 1)
+        self.write(gt.CONFIG_CHKSUM, checksum) # type: ignore
+        self.write(gt.CONFIG_FRESH, 1) # type: ignore
 
     def set_resolution(self, width, height):
         self.configuration[gt.X_OUTPUT_MAX_LOW - gt.CONFIG_START] = width & 0xFF

@@ -123,7 +123,7 @@ class Display(object):
                 self.rotation |= 0b00001000
 
         # Initialize GPIO pins and set implementation specific methods
-        if implementation.name == 'circuitpython':
+        if implementation.name == 'circuitpython': # type: ignore
             self.cs.switch_to_output(value=True)
             self.dc.switch_to_output(value=False)
             self.rst.switch_to_output(value=True)

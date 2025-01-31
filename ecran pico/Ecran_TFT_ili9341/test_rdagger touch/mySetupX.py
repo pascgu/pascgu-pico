@@ -30,8 +30,12 @@ def createMyDisplay():
     #spiTFT = SPI(0, baudrate=10000000, sck=Pin(TFT_CLK_PIN), mosi=Pin(TFT_MOSI_PIN), miso=Pin(TFT_MISO_PIN))
     #spiTFT = SPI(0, baudrate=10000000, sck=Pin(TFT_CLK_PIN), miso=Pin(TFT_MISO_PIN))
     #display = Display(spiTFT, dc=Pin(TFT_DC_PIN), cs=Pin(TFT_CS_PIN), rst=Pin(TFT_RST_PIN))
-    #display = Display(spiTFT, dc=Pin(TFT_DC_PIN), cs=Pin(TFT_CS_PIN), rst=Pin(TFT_RST_PIN), width=320, height=480) # marche
-    display = Display(spiTFT, dc=Pin(TFT_DC_PIN), cs=Pin(TFT_CS_PIN), rst=Pin(TFT_RST_PIN), width=320, height=480, rotation=270)
+    # display = Display(spiTFT, dc=Pin(TFT_DC_PIN), cs=Pin(TFT_CS_PIN), rst=Pin(TFT_RST_PIN), width=320, height=480) # marche vertical
+    display = Display(spiTFT, dc=Pin(TFT_DC_PIN), cs=Pin(TFT_CS_PIN), rst=Pin(TFT_RST_PIN), width=480, height=320, rotation=270) # marche
+    
+    # 26-01-2025 retiré car créer img2rgb565inv.py qui le fait seulement pour les images et pas tout l'écran
+    # 30-01-2025 remis car c'est toute la lib ili9341 qu'il faudrait changer. C'est vraiment notre écran TFT qui gère les
+    #            couleurs inversées par rapport à la lib, donc normal de le laisser inversé complètement
     display.invert(True) # pour une raison étrange, les couleurs de cette lib sont inversées sur cet écran
     return display
 

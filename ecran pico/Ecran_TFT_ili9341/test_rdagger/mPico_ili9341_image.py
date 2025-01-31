@@ -51,11 +51,14 @@ display.draw_image('fruit2_480x320.raw', 0, 0, 480, 320) # fonctionne après avo
 #display.draw_image('fruit2_100x67.raw', 0, 0, 100, 67) # fonctionne
 #display.draw_image('fruit2_100x67_transpPNG.raw', 0, 0, 100, 67) # fonctionne
 # display.draw_image('fruit2_100x67_transpJPG.raw', 0, 0, 100, 67) # pas la transparence
+#display.draw_image('fruit2_100x67_transp.raw', 0, 0, 100, 67) # fonctionne
 #display.draw_image('rgb.raw', 0, 0, 100, 67) # fonctionne
 
-# PG important : Pour générer les images, il faut lancer le script img2rgb565inv.py (nouvelle version de img1rgb565.py qui inverse les bits)
+# NON!!! PG important : Pour générer les images, il faut lancer le script img2rgb565inv.py (nouvelle version de img1rgb565.py qui inverse les bits)
+
+# PG important : Pour générer les images, il faut lancer le script img1rgb565.py
 #               Se mettre dans une commande "activate pico" :
-# (pico) C:\Users\hotma\source\repos\pascgu-pico\ecran pico\Ecran_TFT_ili9341\test_rdagger>python img2rgb565inv.py ..\fruit2_480x320.png
+# (pico) C:\Users\hotma\source\repos\pascgu-pico\ecran pico\Ecran_TFT_ili9341\test_rdagger>python img2rgb565.py ..\fruit2_480x320.png
 # Saved: ..\fruit2_480x320.raw
 
 for i in range(320):
@@ -67,11 +70,11 @@ for i in range(320, 0, -1):
     utime.sleep(0.02)
 
 utime.sleep(2)
+# Display inversion off. PG: car déjà on lors de l'init
+display.invert(False)
+utime.sleep(2)
 # Display inversion on
 display.invert(True)
-utime.sleep(2)
-# Display inversion off
-display.invert(False)
 utime.sleep(1)
 
 #while True:
