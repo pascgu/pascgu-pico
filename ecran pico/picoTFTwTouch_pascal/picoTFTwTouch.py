@@ -74,11 +74,11 @@ class picoTFTwTouch():
             tp = gt911.GT911(sda=self.TOUCH_I2C_SDA_PIN, scl=self.TOUCH_I2C_SCL_PIN,
                              interrupt=self.TOUCH_INT_PIN, reset=self.TOUCH_RESET_PIN)
         tp.begin(gt.Addr.ADDR1)
-        tp.enable_interrupt(self.on_touch)
+        tp.enable_interrupt(self.on_touch_interrupt)
         self.touch_handler = touch_handler
         return tp
     
-    def on_touch(self, pin_interrup):
+    def on_touch_interrupt(self, pin_interrup):
         points = self.touch.get_points()
         self.touch_handler(points)
     

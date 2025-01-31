@@ -10,21 +10,21 @@ from picoTFTwTouch import *
 
 ''' PG : Classe permettant de gérer à la fois l'affichage et le Touch de
          l'écran de S2Pi "TFT Pico Breadboard Kit Plus w/ Capacitive Touch".
-    PG : Cette surcharge permet de gérer une UI avec des boutons
+    PG : Cette classe héritée permet de gérer en plus une UI avec des boutons.
 '''
 class picoTFT_UI(picoTFTwTouch):
     def __init__(self, touch_handler, horizontal=True):
         super().__init__(touch_handler, horizontal)
         self.buttons = []
 
-    def on_touch(self, pin_interrup):
+    def on_touch_interrupt(self, pin_interrup):
         points = self.touch.get_points()
         for p_i in range(len(points)-1, -1, -1): # parcourt inversé: besoin si on suppr des points
             pt = points[p_i]
             for b_i in range(len(self.buttons)-1, -1, -1): # parcourt inversé: besoin car les boutons de la fin sont + près (zoffset) et doivent obtenir le clic
                 bt = self.buttons[b_i]
                 if bt.hit_test(pt.x, pt.y):
-                    bt.click()
+                    bt.click() # TODO : à remplacer par .on_callback_interrupt
                     points.remove(pt)
                     break
         self.touch_handler(points)
