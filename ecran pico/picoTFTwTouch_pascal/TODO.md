@@ -1,0 +1,2 @@
+- Créer un nouveau fichier controls.py et faire une classe de base Control. Button doit hériter de Control.
+- tester la lib lgvl : il faut recompiler l'image de micropython.

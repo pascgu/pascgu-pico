@@ -65,7 +65,7 @@ class picoTFTwTouch():
         self.default_invert=True
         return display
 
-    def create_touch(self, touch_handler, horizontal=True):
+    def create_touch(self, touch_handler=None, horizontal=True):
         if horizontal:
             tp = GT911H(sda=self.TOUCH_I2C_SDA_PIN, scl=self.TOUCH_I2C_SCL_PIN,
                         interrupt=self.TOUCH_INT_PIN, reset=self.TOUCH_RESET_PIN,
@@ -74,8 +74,9 @@ class picoTFTwTouch():
             tp = gt911.GT911(sda=self.TOUCH_I2C_SDA_PIN, scl=self.TOUCH_I2C_SCL_PIN,
                              interrupt=self.TOUCH_INT_PIN, reset=self.TOUCH_RESET_PIN)
         tp.begin(gt.Addr.ADDR1)
-        tp.enable_interrupt(self.on_touch_interrupt)
-        self.touch_handler = touch_handler
+        if touch_handler!=None:
+            tp.enable_interrupt(self.on_touch_interrupt)
+            self.touch_handler = touch_handler
         return tp
     
     def on_touch_interrupt(self, pin_interrup):

@@ -7,15 +7,41 @@ from colors import *
 # from picoTFTwTouch import * #PG: je le laisse aussi pour ne pas oublier de l'upload
 from picoTFT_UI import *
 
+last_points=[]
+last_points_while_managing=[]
 def on_touch_interrupt(points):
+    global in_manage_on_touch
     # PG: ATTENTION dans ce callback, on se trouve dans une interruption donc il est préférable que le code soit
     #     minimal et d'avoir les gros traitements (y compris l'affichage) dans le "while True" principal,
-    #     comme c'est fait pour les boutons avec picoTFT_UI.manage_buttons_click()
+    #     comme c'est fait pour les boutons avec picoTFT_UI.manage_ctrls_callback()
     if points:
-        print("Received touch events:")
-        for i, point in enumerate(points):
-            print(f"  Touch {i+1}: {point.x}, {point.y}, size: {point.size}")
-            TFTui.display.fill_circle(point.x, point.y, 2, green)
+        for i in range(len(points)):
+            pt = points[i]
+            # print(f"  Touch {i+1}: {pt.x}, {pt.y}, size: {pt.size}")
+            # TFTui.display.fill_circle(pt.x, pt.y, 2, green)
+            if in_manage_on_touch:
+                last_points_while_managing.append(pt)
+                # if not pt in last_points2:
+                #     last_points2.append(pt)
+            #elif not pt in last_points:
+            else:
+                last_points.append(pt)
+
+in_manage_on_touch=False
+def manage_on_touch():
+    global last_points, last_points_while_managing, in_manage_on_touch
+    in_manage_on_touch = True
+    points = last_points
+    if points:
+        #print("Received touch events:")
+        for i in range(0,len(points)):
+            pt = points[i]
+            #print(f"  Touch {i+1}: {pt.x}, {pt.y}, size: {pt.size}")
+            #TFTui.display.fill_circle(pt.x, pt.y, 2, green)
+            TFTui.display.draw_pixel(pt.x, pt.y, green)
+    last_points=last_points_while_managing
+    in_manage_on_touch = False
+    last_points_while_managing=[]
 
 def reset_ui():
     global bt2_i, bt3_i
@@ -57,12 +83,13 @@ bt1 = Button(Rect(0,0,100,45), "refresh", lambda bt: reset_ui())
 bt2 = Button(Rect(0,50,100,45), "auto-click", bt2_clicked, autoclick=True)
 bt3 = Button(Rect(0,100,100,90), "bt3     ", bt34_clicked)
 bt4 = Button(Rect(50,130,50,45), "bt4", bt34_clicked, backColor=white)
-TFTui.add_buttons([bt1,bt2,bt3,bt4])
+TFTui.add_controls([bt1,bt2,bt3,bt4])
 reset_ui()
 
 try:
     while True:
-        TFTui.manage_buttons_click()
+        TFTui.manage_ctrls_callback()
+        manage_on_touch()
         sleep(0.01)
 except KeyboardInterrupt:
     pass
