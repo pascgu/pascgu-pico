@@ -61,3 +61,22 @@ Permet aussi de voir les fichiers sur le pico.
 ### led intégrée
 Attention la led intégrée ne fonctionne pas avec le Pico W parce qu'il force Pin(25) au lieu de Pin('LED').<br>
 Pour contourner ceci, utiliser une variable : myLed et la définir à un texte "LED" puis utiliser cette variable dans "set output pin"
+
+
+
+# Vitascience
+
+https://fr.vittascience.com/pico/
+
+idem que BIPES mais visiblement fait par des français. Intéressant car on voit le code généré juste à coté des blocs.
+
+Il faut créer un compte et se connecter pour avoir certaines fonctionnalités là où BIPES pas de compte.
+
+Semble simple et accessible aussi. Il y a même un mode pour avoir la barre d'outil façon Scratch (qui est un autre outil pour les enfants pour appréhender le dev via les blocks).<br>
+Alors pour prolongé Scratch, ils ont fait l'outil **adacraft** qui reprend l'interface. Il propose aussi de jouer avec de l'IA (image, texte, son). Donc en gros pour un enfant : Scratch -> Vittascience Adacraft -> Vittascience Pico.
+
+Il m'a l'air à la fois plus poussé et plus simple que BIPES car tout est à l'écran : blocs,code,console.
+
+Il y a un mode simulateur qui permet de voir rapidement le résultat sans forcément avoir besoin du hardware avec un pico.
+
+Par contre ça m'a l'air plus compliqué d'utiliser le pico. Ca demande de téléverser le fichier dessus, ça le renomme en main.py, on ne peut pas juste lancer et voir le résultat rapidement. Mais il y a un firmware (.uf2) à installer sur le pico, ce n'est peut-être pas le même que celui de base, je n'ai pas testé.
