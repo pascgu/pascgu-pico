@@ -1,8 +1,26 @@
 
 from colors import *
 from picoTFTwTouch import *
+from machine import Timer
 
+class CtrlTimer():
+    def __init__(self, ctrl=None, timer:Timer|None=None):
+        self.timer = timer or Timer()
+        self.ctrl = ctrl
+
+    def wait(self, period_ms, callback):
+        self.timer.deinit()
+        self.timer.init(mode=Timer.ONE_SHOT, period=period_ms, callback=lambda t:callback(self.ctrl))
+        
+    def periodic(self, period_ms, callback, freq=-1):
+        self.timer.deinit()
+        self.timer.init(mode=Timer.PERIODIC, period=period_ms, freq=freq, callback=lambda t:callback(self.ctrl))
+
+    def stop(self):
+        self.timer.deinit()
+    
 class Control():
+    __timer=None
     def __init__(self, name:str, callback, callback_interrupt=None):
         self.name = name
         self.callback = callback
@@ -22,9 +40,15 @@ class Control():
         if self.callback != None:
             self.callback(self)
     
+    def timer(self) -> CtrlTimer:
+        if self.__timer is None:
+            self.__timer = CtrlTimer(self)
+        return self.__timer
+    
     def __str__(self):
         return self.name+"<"+type(self).__name__+">"
-        
+
+
 
 class Button(Control):
     '''Crée un nouveau bouton. Bien penser à l'ajouter après avec picoTFT_UI.add_button (ou add_buttons).

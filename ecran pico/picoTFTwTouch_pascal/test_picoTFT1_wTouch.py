@@ -7,6 +7,7 @@ from ili9341 import color565
 from picoTFTwTouch import *
 
 def on_touch(points):
+    # ici on est dans un callback d'interruption
     global TFT
     if points:
         print("Received touch events:")

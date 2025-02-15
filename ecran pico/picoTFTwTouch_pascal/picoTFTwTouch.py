@@ -78,7 +78,7 @@ class picoTFTwTouch():
         self.touch = self.create_touch(touch_handler, use_time_for_touch, horizontal)
 
     def create_display(self, horizontal=True):
-        spiTFT = SPI(0, baudrate=40000000, sck=Pin(self.TFT_CLK_PIN), mosi=Pin(self.TFT_MOSI_PIN))
+        spiTFT = SPI(0, baudrate=62_500_000, sck=Pin(self.TFT_CLK_PIN), mosi=Pin(self.TFT_MOSI_PIN))
         if horizontal:
             self.width = 480
             self.height = 320
@@ -97,14 +97,14 @@ class picoTFTwTouch():
         if horizontal:
             tp = GT911H(sda=self.TOUCH_I2C_SDA_PIN, scl=self.TOUCH_I2C_SCL_PIN,
                         interrupt=self.TOUCH_INT_PIN, reset=self.TOUCH_RESET_PIN,
-                        display_height=self.height, use_time=use_time)
+                        display_height=self.height, use_time=use_time, freq=100_000)
         else:
             #tp = gt911.GT911(sda=self.TOUCH_I2C_SDA_PIN, scl=self.TOUCH_I2C_SCL_PIN,
             #                 interrupt=self.TOUCH_INT_PIN, reset=self.TOUCH_RESET_PIN)
             
             tp = GT911V(sda=self.TOUCH_I2C_SDA_PIN, scl=self.TOUCH_I2C_SCL_PIN,
                         interrupt=self.TOUCH_INT_PIN, reset=self.TOUCH_RESET_PIN,
-                        display_height=self.height, use_time=use_time)
+                        display_height=self.height, use_time=use_time, freq=100_000)
         tp.begin(gt.Addr.ADDR1)
         if touch_handler!=None:
             tp.enable_interrupt(self.on_touch_interrupt)

@@ -14,8 +14,8 @@ from picoTFT_Control import *
     PG : Cette classe héritée permet de gérer en plus une UI avec des boutons.
 '''
 class picoTFT_UI(picoTFTwTouch):
-    def __init__(self, touch_handler=None, horizontal=True):
-        super().__init__(touch_handler, use_time_for_touch=True, horizontal=horizontal)
+    def __init__(self, touch_handler=None, use_time_for_touch=True, horizontal=True):
+        super().__init__(touch_handler, use_time_for_touch=use_time_for_touch, horizontal=horizontal)
         self.controls:list[Control] = []
         self.ctrls_touched:list[tuple[Control,bool]] = []
         self.ctrls_touched_last_interrupt:list[Control] = []
@@ -33,9 +33,9 @@ class picoTFT_UI(picoTFTwTouch):
                 if ctrl.hit_test(pt.x, pt.y):
                     last_touched = ctrl in self.ctrls_touched_last_interrupt or ctrl in self.ctrls_touched_last_interrupt2
                     ctrls_touched_in_interrupt.append(ctrl)
+                    ctrl.on_touch_callback_interrupt(last_touched)
                     ctrls_touched_countains_ctrl=[True for c,lt in self.ctrls_touched if c==ctrl] # équivalent à : ctrl in ctrls_touched
                     if not ctrls_touched_countains_ctrl:
-                        ctrl.on_touch_callback_interrupt(last_touched)
                         self.ctrls_touched.append((ctrl,last_touched))
                     points.pop(p_i) # remove pt
                     break
