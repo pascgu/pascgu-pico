@@ -7,14 +7,42 @@ import gt911
 import gt911_constants as gt
 
 Rect = namedtuple("Rect", ["x", "y", "w", "h"])
+TouchPt = namedtuple("TouchPt", ["id", "x", "y", "size","t"])
 
-'''GT911 with management of horizontal points instead of vertical'''
-class GT911H(gt911.GT911):
-    def __init__(self, sda, scl, interrupt, reset, display_height, freq=100_000):
+class GT911V(gt911.GT911):
+    def __init__(self, sda, scl, interrupt, reset, display_height, use_time=False, freq=100_000):
         super().__init__(sda, scl, interrupt, reset, freq)
         self.display_height = display_height
+        self.use_time = use_time
+    
+    def get_points(self):
+        points = []
+        info = self.read(gt.POINT_INFO, 1)[0]
+        ready = bool((info >> 7) & 1)
+        # large_touch = bool((info >> 6) & 1)
+        touch_count = info & 0xF
+        if ready and touch_count > 0:
+            ticks_us = 0
+            if self.use_time: ticks_us = utime.ticks_us()
+            for i in range(touch_count):
+                data = self.read(gt.POINT_1 + (i * 8), 7)
+                points.append(self.parse_point(data, ticks_us))
+        self.write(gt.POINT_INFO, [0])
+        return points
+    
+    def parse_point(self, data, ticks_us):
+        track_id = data[0]
+        x = data[1] + (data[2] << 8)
+        y = data[3] + (data[4] << 8)
+        size = data[5] + (data[6] << 8)
+        return TouchPt(track_id, x, y, size, ticks_us)
+    
+'''GT911 with management of horizontal points instead of vertical'''
+class GT911H(GT911V):
+    def __init__(self, sda, scl, interrupt, reset, display_height, use_time=False, freq=100_000):
+        super().__init__(sda, scl, interrupt, reset, display_height, use_time, freq)
 
-    def parse_point(self, data):
+    def parse_point(self, data, ticks_us):
         track_id = data[0]
         #x = data[1] + (data[2] << 8)
         #y = data[3] + (data[4] << 8)
@@ -24,7 +52,7 @@ class GT911H(gt911.GT911):
         y = self.display_height - (data[1] + (data[2] << 8))
         x = data[3] + (data[4] << 8)
         size = data[5] + (data[6] << 8)
-        return gt911.TouchPoint(track_id, x, y, size)
+        return TouchPt(track_id, x, y, size, ticks_us)
 
 
 ''' PG : Classe permettant de gérer à la fois l'affichage et le Touch de
@@ -45,9 +73,9 @@ class picoTFTwTouch():
     TOUCH_RESET_PIN = const(10) # TPRST reset
     TOUCH_INT_PIN = const(11) # TPINT interrupt
 
-    def __init__(self, touch_handler, horizontal=True):
+    def __init__(self, touch_handler, use_time_for_touch=False, horizontal=True):
         self.display = self.create_display(horizontal)
-        self.touch = self.create_touch(touch_handler, horizontal)
+        self.touch = self.create_touch(touch_handler, use_time_for_touch, horizontal)
 
     def create_display(self, horizontal=True):
         spiTFT = SPI(0, baudrate=40000000, sck=Pin(self.TFT_CLK_PIN), mosi=Pin(self.TFT_MOSI_PIN))
@@ -65,14 +93,18 @@ class picoTFTwTouch():
         self.default_invert=True
         return display
 
-    def create_touch(self, touch_handler=None, horizontal=True):
+    def create_touch(self, touch_handler=None, use_time=False, horizontal=True):
         if horizontal:
             tp = GT911H(sda=self.TOUCH_I2C_SDA_PIN, scl=self.TOUCH_I2C_SCL_PIN,
                         interrupt=self.TOUCH_INT_PIN, reset=self.TOUCH_RESET_PIN,
-                        display_height=self.height)
+                        display_height=self.height, use_time=use_time)
         else:
-            tp = gt911.GT911(sda=self.TOUCH_I2C_SDA_PIN, scl=self.TOUCH_I2C_SCL_PIN,
-                             interrupt=self.TOUCH_INT_PIN, reset=self.TOUCH_RESET_PIN)
+            #tp = gt911.GT911(sda=self.TOUCH_I2C_SDA_PIN, scl=self.TOUCH_I2C_SCL_PIN,
+            #                 interrupt=self.TOUCH_INT_PIN, reset=self.TOUCH_RESET_PIN)
+            
+            tp = GT911V(sda=self.TOUCH_I2C_SDA_PIN, scl=self.TOUCH_I2C_SCL_PIN,
+                        interrupt=self.TOUCH_INT_PIN, reset=self.TOUCH_RESET_PIN,
+                        display_height=self.height, use_time=use_time)
         tp.begin(gt.Addr.ADDR1)
         if touch_handler!=None:
             tp.enable_interrupt(self.on_touch_interrupt)

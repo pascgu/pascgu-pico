@@ -8,18 +8,18 @@ from picoTFTwTouch import *
 
 def on_touch(points):
     global TFT
-    
     if points:
         print("Received touch events:")
         for i, point in enumerate(points):
-            print(f"  Touch {i+1}: {point.x}, {point.y}, size: {point.size}")
+            print(f"  Touch {i+1}: {point}")
             TFT.display.fill_circle(point.x, point.y, 2, color565(0,255,0))
+    #else: # il peut parfois être utile de gérer quand on relève le doigt et dans ce cas, il y a un on_touch sans point.
 
 TFT = picoTFTwTouch(on_touch)
 
 try:
     while True:
-        sleep(0.01)
+        pass
 except KeyboardInterrupt:
     pass
 
