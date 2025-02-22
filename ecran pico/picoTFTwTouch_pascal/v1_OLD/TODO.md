@@ -1,3 +1,2 @@
-- créer drivers.py qui contiendra le min pour faire tourner gt911 et ili9341
 - DONE: Créer un nouveau fichier controls.py et faire une classe de base Control. Button doit hériter de Control.
 - tester la lib lgvl : il faut recompiler l'image de micropython.
