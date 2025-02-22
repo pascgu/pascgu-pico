@@ -1,5 +1,6 @@
 
 from ucollections import deque
+from utime import ticks_us, ticks_diff
 from colors import *
 from picoTFT_drivers import TouchPt
 from picoTFTwTouch import *
@@ -10,50 +11,49 @@ from picoTFT_Control import *
     PG : Cette classe héritée permet de gérer en plus une UI avec des boutons.
 '''
 class picoTFT_UI(picoTFTwTouch):
-    def __init__(self, touch_handler=None, use_time_for_touch=True, rotation=270, deque_maxlen=1000):
+    def __init__(self, touch_handler=None, use_time_for_touch=True, rotation=270,
+                 deque_maxlen=100, touch_point_min_diff_us=50_000):
         super().__init__(touch_handler, use_time_for_touch=use_time_for_touch, rotation=rotation)
+        self.touch_point_min_diff_us = touch_point_min_diff_us
         self.controls:list[Control] = []
         self.ctrls_touched:deque[tuple[Control,bool]] = deque((), deque_maxlen)
-        #self.ctrls_touched_last_time = {}
-        self.ctrls_touched_in_interrupt:deque[Control] = deque((), deque_maxlen)
-        self.ctrls_touched_last_interrupt:deque[Control] = deque((), deque_maxlen)
+        self.ctrls_touched_last_time:dict[Control,int] = {}
 
     def on_touch_interrupt(self, pin_interrup):
         # cette fonction est appelée environ tous les 10_000us au mieux si on laisse appuyé
         # si on relève le doigt, il y a 3 interrupts déclenchés avec 0 point
         self.touch.get_points()
-        p_i = 0
-        while self.ctrls_touched_in_interrupt: # == clear()
-            self.ctrls_touched_in_interrupt.popleft()
-        while p_i < self.touch.buff_points_len:
+        #no_pts = self.touch.buff_points_len == 0 # aucun point, on relève le doigt
+        p_i = self.touch.buff_points_len-1
+        while p_i >= 0:
             pt:TouchPt = self.touch.buff_points[p_i]
             for c_i in range(len(self.controls)-1, -1, -1): # parcourt inversé: besoin car les boutons de la fin sont + près (z-offset) et doivent obtenir le clic
                 ctrl = self.controls[c_i]
                 if ctrl.hit_test(pt.x, pt.y):
-                    last_touched = ctrl in self.ctrls_touched_last_interrupt
-                    self.ctrls_touched_in_interrupt.append(ctrl)
+                    diff = ticks_diff(pt.t, self.ctrls_touched_last_time[ctrl])
+                    last_touched = diff < self.touch_point_min_diff_us
+                    self.ctrls_touched_last_time[ctrl] = pt.t
+
                     ctrl.on_touch_callback_interrupt(last_touched)
-                    ctrls_touched_countains_ctrl=[True for c,lt in self.ctrls_touched if c==ctrl] # équivalent à : ctrl in ctrls_touched
+                    ctrls_touched_countains_ctrl=False
+                    for c,lt in self.ctrls_touched: # équivalent à : ctrl in ctrls_touched
+                        if c==ctrl:
+                            ctrls_touched_countains_ctrl=True
+                            break
                     if not ctrls_touched_countains_ctrl:
                         self.ctrls_touched.append((ctrl,last_touched))
                     self.touch.remove_point(p_i)
-                    p_i -= 1
                     break
-            p_i += 1
+            p_i -= 1
         
-        if self.touch.buff_points_len:
-            if self.touch_handler is not None:
+        #if self.touch.buff_points_len or no_pts:
+        if self.touch_handler is not None:
+            if self.touch.buff_points_len:
                 self.touch_handler(self.touch.buff_points, self.touch.buff_points_len)
-        
-        while self.ctrls_touched_last_interrupt: # == clear()
-            self.ctrls_touched_last_interrupt.popleft()
-        while self.ctrls_touched_in_interrupt:
-            ctrl:Control = self.ctrls_touched_in_interrupt.popleft()
-            self.ctrls_touched_last_interrupt.append(ctrl)
-    
+
     def add_control(self, ctrl):
         self.controls.append(ctrl)
-        #self.ctrls_touched_last_time[ctrl] = 0
+        self.ctrls_touched_last_time[ctrl] = 0
     def add_controls(self, ctrls:list):
         for i in range(len(ctrls)):
             self.add_control(ctrls[i])
@@ -70,6 +70,6 @@ class picoTFT_UI(picoTFTwTouch):
     def manage_ctrls_callback(self):
         # Cette fonction est exécutée en moyenne tous les 400us (=0.4ms) si pas de bouton appuyé. Si 1 bouton: 7400 (si ctrl.on_touch_callback) ou 500 (sinon)
         # Elle est donc appelée bien plus souvent que les interrupt (env 10_000us eux)
-        while len(self.ctrls_touched)>0:
+        if self.ctrls_touched:
             ctrl,last_touched = self.ctrls_touched.popleft()
             ctrl.on_touch_callback(last_touched)

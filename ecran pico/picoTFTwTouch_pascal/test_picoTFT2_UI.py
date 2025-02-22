@@ -1,5 +1,5 @@
 from utime import sleep, ticks_us, ticks_diff
-from collections import deque
+from ucollections import deque
 # import ili9341, gt911, gt911_constants as gt #PG: je le laisse ici pour ne pas oublier d'upload ces 3 fichiers .py
 from colors import *
 # from picoTFTwTouch import * #PG: je le laisse aussi pour ne pas oublier de l'upload
@@ -13,30 +13,30 @@ points:deque[tuple[int,int,int]]=deque((),100)
 def on_touch_interrupted(buff_points, n):
     global points
     # PG: ATTENTION dans ce callback, on se trouve dans une interruption donc il est préférable que le code soit
-    #     minimal et d'avoir les gros traitements (y compris l'affichage) dans le "while True" principal,
-    #     comme c'est fait pour les boutons avec picoTFT_UI.manage_ctrls_callback()
+    #     minimal et d'avoir les gros traitements (y compris l'affichage) dans manage_on_touch() qui est appelé
+    #     dans "while True" principal. Il faut éviter l'allocation mémoire, donc deque et tuple c'est le mieux.
+    # PG: les buff_points sont des objets qui sont réutilisés à chaque interrupt, il faut donc soit sauver leurs
+    #     valeurs, soit les cloner.
     for i in range(n):
-        pt=buff_points[i]
+        pt:TouchPt=buff_points[i]
         #print(f"{i}: {pt}")
-        # TFTui.display.fill_circle(pt.x, pt.y, 2, green)
+        #TFTui.display.fill_circle(pt.x, pt.y, 2, green)
         points.append((pt.id,pt.x,pt.y))
 
-last_pt = {} # last_pt, one for each ids (chaque doigt correspond à un id différents quand plusieurs touch)
+last_pt = {} # last_pt, one for each ids (chaque doigt correspond à un id différent quand plusieurs touch)
 def manage_on_touch():
     global points, last_pt
     if points:
         #print("Received touch events:")
-        # old to do : regarder si une FIFO existe mieux que list => oui : queue, NON pas sous micropython
-        # old to do : essayer https://github.com/peterhinch/micropython-async/blob/master/v3/primitives/queue.py
-        # => pas besoin car list.append() et list.pop(0) fonctionnent bien. Sinon il existe collections.deque
         id,x,y = points.popleft()
-        last_pt_id = last_pt.get(id)
-        if last_pt_id is not None and id==0:
-            last_x,last_y=last_pt_id
-            TFTui.display.draw_line(last_x, last_y, x, y, green)
+        if id==0:
+            last_pt_id = last_pt.get(id)
+            if last_pt_id is not None:
+                last_x,last_y=last_pt_id
+                TFTui.display.draw_line(last_x, last_y, x, y, green)
+            last_pt[id] = (x,y)
         else:
             TFTui.display.draw_pixel(x, y, green)
-        last_pt[id] = (x,y)
 
 def reset_ui():
     global bt2_i, bt3_i, last_pt
@@ -62,7 +62,7 @@ def bt3_on_interrupt(bt:Button):
     #print("bt3_on_interrupt",bt3_i,ticks_diff(ticks,last_ticks))
     #last_ticks = ticks
 def bt3_clicked_long_process(bt,txt):
-    sleep(1)
+    #sleep(1) # ne surtout pas faire ça car cela bloque les interruptions (pas d'interrupt pendant 1s, donc considère nouveau clic)
     TFTui.draw_text8x8(bt.rect.x+bt.rect.w+10, bt.rect.y+5, txt, black)
 def bt34_clicked(bt:Button):
     global bt3, bt3_i, bt4, last_ticks
@@ -78,7 +78,7 @@ def bt34_clicked(bt:Button):
         TFTui.draw_text8x8(bt4.rect.x+bt4.rect.w+10, bt4.rect.y+5, txt4, black) # efface si un msg bt4 clicked
 
         #timer.init(mode=Timer.ONE_SHOT, period=1000, callback=lambda t: bt3_clicked_long_process(bt3,txt3))
-        bt.timer().wait(1000, callback=lambda ctrl: bt3_clicked_long_process(ctrl,txt3))
+        bt.timer().wait(2000, callback=lambda ctrl: bt3_clicked_long_process(ctrl,txt3))
         #bt3_i+=1
         # TODO : quand on active ceci et qu'on clique plusieurs fois sur bt3, ça ne fait rien tant que ceci pas terminé donc on rate des clics. C'est bien ce qu'on veut? Autre type de bouton?
         #sleep(1)
@@ -98,7 +98,7 @@ reset_ui()
 try:
     while True:
         TFTui.manage_ctrls_callback()
-        ##manage_on_touch()
+        manage_on_touch()
 except KeyboardInterrupt:
     pass
 

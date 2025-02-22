@@ -1,5 +1,5 @@
 
-from collections import namedtuple
+from ucollections import namedtuple
 import ili9341
 from machine import Pin, SPI
 from picoTFT_drivers import GT911_picoTFT
@@ -61,6 +61,11 @@ class picoTFTwTouch():
         #  à faire buff_points[i].clone() pour créer un nouvel objet et pas ceux du buffer buff_points.
         self.touch_handler(self.touch.buff_points, self.touch.buff_points_len)
     
+    def disable_interrupt(self):
+        self.touch.disable_interrupt()
+    def enable_interrupt(self):
+        self.touch.enable_interrupt(self.on_touch_interrupt)
+
     def cleanup(self):
         self.display.cleanup()
     
