@@ -1,6 +1,7 @@
 
 from ucollections import deque
 from utime import ticks_us, ticks_diff
+from micropython import schedule
 from colors import *
 from picoTFT_drivers import TouchPt
 from picoTFTwTouch import *
@@ -14,7 +15,7 @@ class picoTFT_UI(picoTFTwTouch):
     def __init__(self, touch_handler=None, use_time_for_touch=True, rotation=270,
                  deque_maxlen=100, touch_point_min_diff_us=50_000):
         super().__init__(touch_handler, use_time_for_touch=use_time_for_touch, rotation=rotation)
-        self.touch_point_min_diff_us = touch_point_min_diff_us
+        self.touch_point_min_diff_us = touch_point_min_diff_us # 30_000 correspond à 3x on_touch_interrupt ce qui est le min (50k pour être large)
         self.controls:list[Control] = []
         self.ctrls_touched:deque[tuple[Control,bool]] = deque((), deque_maxlen)
         self.ctrls_touched_last_time:dict[Control,int] = {}
@@ -31,7 +32,7 @@ class picoTFT_UI(picoTFTwTouch):
                 ctrl = self.controls[c_i]
                 if ctrl.hit_test(pt.x, pt.y):
                     diff = ticks_diff(pt.t, self.ctrls_touched_last_time[ctrl])
-                    last_touched = diff < self.touch_point_min_diff_us
+                    last_touched = diff < self.touch_point_min_diff_us # en dessous de ça, on considère que le bouton était déjà appuyé
                     self.ctrls_touched_last_time[ctrl] = pt.t
 
                     ctrl.on_touch_callback_interrupt(last_touched)
@@ -73,3 +74,13 @@ class picoTFT_UI(picoTFTwTouch):
         if self.ctrls_touched:
             ctrl,last_touched = self.ctrls_touched.popleft()
             ctrl.on_touch_callback(last_touched)
+
+
+class picoTFT_UI_schedule(picoTFT_UI):
+    def __init__(self, touch_handler=None, use_time_for_touch=True, rotation=270,
+                 deque_maxlen=100, touch_point_min_diff_us=50_000):
+        super().__init__(touch_handler, use_time_for_touch=use_time_for_touch, rotation=rotation,
+                         deque_maxlen=deque_maxlen, touch_point_min_diff_us=touch_point_min_diff_us)
+    
+    def on_touch_interrupt(self, pin_interrup):
+        schedule(super().on_touch_interrupt, pin_interrup)

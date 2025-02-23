@@ -49,9 +49,8 @@ class picoTFTwTouch():
                            width=self.width, height=self.height, rotation=self.rotation,
                            use_time=use_time, freq=100_000)
         tp.begin()
-        if touch_handler!=None:
-            tp.enable_interrupt(self.on_touch_interrupt)
-            self.touch_handler = touch_handler
+        tp.enable_interrupt(self.on_touch_interrupt)
+        self.touch_handler = touch_handler
         return tp
     
     def on_touch_interrupt(self, pin_interrup):
@@ -59,7 +58,8 @@ class picoTFTwTouch():
         # attention touch.buff_points est un buffer pré-alloué de TouchPt.
         # Pour pouvoir allouer de la mémoire, utiliser micropython.schedule et bien penser
         #  à faire buff_points[i].clone() pour créer un nouvel objet et pas ceux du buffer buff_points.
-        self.touch_handler(self.touch.buff_points, self.touch.buff_points_len)
+        if self.touch_handler:
+            self.touch_handler(self.touch.buff_points, self.touch.buff_points_len)
     
     def disable_interrupt(self):
         self.touch.disable_interrupt()

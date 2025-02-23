@@ -6,8 +6,8 @@ from colors import *
 from picoTFT_drivers import TouchPt
 from picoTFT_UI import *
 
-import micropython
-micropython.alloc_emergency_exception_buf(100) # permet de voir si jamais des exceptions dans les handlers
+from micropython import alloc_emergency_exception_buf
+alloc_emergency_exception_buf(100) # permet de voir si jamais des exceptions dans les handlers
 
 points:deque[tuple[int,int,int]]=deque((),100)
 def on_touch_interrupted(buff_points, n):
@@ -88,10 +88,11 @@ def bt34_clicked(bt:Button):
         TFTui.draw_text8x8(bt.rect.x+bt.rect.w+10, bt.rect.y+5, txt4, cyan)
 
 TFTui = picoTFT_UI(on_touch_interrupted)
-bt1 = Button("bt1",Rect(0,0,100,45), "refresh", lambda bt: reset_ui())
-bt2 = Button("bt2",Rect(0,50,100,45), "auto-click", bt2_clicked, autoclick=True)
-bt3 = Button("bt3",Rect(0,100,100,90), "bt3     ", bt34_clicked, bt3_on_interrupt)
-bt4 = Button("bt4",Rect(50,130,50,45), "bt4", bt34_clicked, backColor=white)
+#TFTui = picoTFT_UI_schedule(on_touch_interrupted)
+bt1 = Button("bt1",Rect(0,0,100,45), lambda bt: reset_ui(), label="refresh")
+bt2 = Button("bt2",Rect(0,50,100,45), bt2_clicked, label="auto-click", autoclick=True)
+bt3 = Button("bt3",Rect(0,100,100,90), bt34_clicked, bt3_on_interrupt, label="bt3     ")
+bt4 = Button("bt4",Rect(50,130,50,45), bt34_clicked, label="bt4", backColor=white)
 TFTui.add_controls([bt1,bt2,bt3,bt4])
 reset_ui()
 
