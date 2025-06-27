@@ -80,8 +80,8 @@ class Button(Control):
                  label:str="", foreColor=black, backColor=color565x(0x1CB7BC),
                  autoclick=False):
         super().__init__(name, callback, callback_interrupt)
-        self.rect = rect
-        self.label = label
+        self.rect:Rect = rect
+        self.label:str = label
         self.foreColor = foreColor
         self.backColor = backColor
         self.autoclick = autoclick

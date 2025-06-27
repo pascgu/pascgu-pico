@@ -16,9 +16,9 @@ class picoTFT_UI(picoTFTwTouch):
                  deque_maxlen=100, touch_point_min_diff_us=50_000):
         super().__init__(touch_handler, use_time_for_touch=use_time_for_touch, rotation=rotation)
         self.touch_point_min_diff_us = touch_point_min_diff_us # 30_000 correspond à 3x on_touch_interrupt ce qui est le min (50k pour être large)
-        self.controls:list[Control] = []
-        self.ctrls_touched:deque[tuple[Control,bool]] = deque((), deque_maxlen)
-        self.ctrls_touched_last_time:dict[Control,int] = {}
+        self.controls:list[Control] = [] # liste des controls ajoutés via add_control()
+        self.ctrls_touched:deque[tuple[Control,bool]] = deque((), deque_maxlen) # queue des boutons appuyés
+        self.ctrls_touched_last_time:dict[Control,int] = {} # dernière fois que le bouton était appuyé dans un interrupt
 
     def on_touch_interrupt(self, pin_interrup):
         # cette fonction est appelée environ tous les 10_000us au mieux si on laisse appuyé
@@ -58,6 +58,9 @@ class picoTFT_UI(picoTFTwTouch):
     def add_controls(self, ctrls:list):
         for i in range(len(ctrls)):
             self.add_control(ctrls[i])
+    def remove_control(self, ctrl:Control):
+        self.controls.remove(ctrl)
+        del self.ctrls_touched_last_time[ctrl]
     
     def draw_controls(self):
         for i in range(len(self.controls)):
